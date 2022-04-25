@@ -1,5 +1,19 @@
 import { Participants } from 'hooks/useParticipants';
 
+import { motion } from 'framer-motion';
+
 export function Participant({ participant }: { participant: string }) {
-  return <h1 className='text-3xl font-bold text-gray-800 mr-10'>{participant}</h1>;
+  return (
+    <motion.h1
+      transition={{
+        type: 'spring',
+        stiffness: 250,
+        damping: 20,
+      }}
+      className='text-3xl font-bold text-gray-800 mr-10'
+      layout
+    >
+      {participant}
+    </motion.h1>
+  );
 }

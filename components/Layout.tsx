@@ -4,6 +4,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon, FilmIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import { auth, db, signInWithGoogle, signOut } from 'lib/firebase';
+import { AnimateSharedLayout } from 'framer-motion';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Link from 'next/link';
@@ -52,6 +53,7 @@ function Layout({ children }: { children: JSX.Element }) {
     { name: 'Add Movie', href: '/add-movie' },
   ]);
   const [user, authLoading, authError] = useAuthState(auth);
+
   const { participantsCollection } = useParticipants();
 
   return (
@@ -64,11 +66,14 @@ function Layout({ children }: { children: JSX.Element }) {
                 <div className='flex items-center justify-between h-16'>
                   <div className='flex items-center'>
                     <div className='flex-shrink-0'>
-                      <FilmIcon className='w-8 h-8 text-yellow-400' aria-hidden='true' />
+                      <FilmIcon
+                        className='w-8 h-8 text-yellow-400'
+                        aria-hidden='true'
+                      />
                     </div>
                     <div className='hidden md:block'>
                       <div className='flex items-baseline ml-10 space-x-4'>
-                        {page.map(item => (
+                        {page.map((item) => (
                           <ActiveLink
                             activeClassName={
                               'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
@@ -131,7 +136,7 @@ function Layout({ children }: { children: JSX.Element }) {
                             leaveTo='transform opacity-0 scale-95'
                           >
                             <Menu.Items className='absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                              {userNavigation.map(item => (
+                              {userNavigation.map((item) => (
                                 <Menu.Item key={item.name}>
                                   {({ active }) => (
                                     <Link href={item.href}>
@@ -174,7 +179,10 @@ function Layout({ children }: { children: JSX.Element }) {
                         {open ? (
                           <XIcon className='block w-6 h-6' aria-hidden='true' />
                         ) : (
-                          <MenuIcon className='block w-6 h-6' aria-hidden='true' />
+                          <MenuIcon
+                            className='block w-6 h-6'
+                            aria-hidden='true'
+                          />
                         )}
                       </Disclosure.Button>
                     ) : (
@@ -191,7 +199,7 @@ function Layout({ children }: { children: JSX.Element }) {
 
               <Disclosure.Panel className='md:hidden'>
                 <div className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
-                  {page.map(item => (
+                  {page.map((item) => (
                     <ActiveLink
                       activeClassName={
                         'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
@@ -240,7 +248,7 @@ function Layout({ children }: { children: JSX.Element }) {
                       </button>
                     </div>
                     <div className='px-2 mt-3 space-y-1'>
-                      {userNavigation.map(item => (
+                      {userNavigation.map((item) => (
                         <Disclosure.Button
                           key={item.name}
                           as='a'
@@ -260,16 +268,25 @@ function Layout({ children }: { children: JSX.Element }) {
 
         <header className=' bg-gray-800 shadow bg-gradient-to-r from-yellow-400 to-yellow-200'>
           <div className='px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8 hidden md:flex flex-wrap '>
-            {participantsCollection.participants
-              .slice(participantsCollection.cursor)
-              .concat(participantsCollection.participants.slice(0, participantsCollection.cursor))
-              .map(participant => (
-                <Participant key={participant} participant={participant} />
-              ))}
+            <AnimateSharedLayout>
+              {participantsCollection.participants
+                .slice(participantsCollection.cursor)
+                .concat(
+                  participantsCollection.participants.slice(
+                    0,
+                    participantsCollection.cursor
+                  )
+                )
+                .map((participant) => (
+                  <Participant key={participant} participant={participant} />
+                ))}
+            </AnimateSharedLayout>
           </div>
         </header>
         <main>
-          <div className='py-6 mx-auto max-w-7xl sm:px-6 lg:px-8'>{children}</div>
+          <div className='py-6 mx-auto max-w-7xl sm:px-6 lg:px-8'>
+            {children}
+          </div>
         </main>
       </div>
     </>
